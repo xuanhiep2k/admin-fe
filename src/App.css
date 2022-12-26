@@ -1,14 +1,68 @@
-.main {
-  display: flex;
-  height: 100vh;
+/*@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");*/
+
+html,
+body,
+#root,
+.app,
+.content {
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    font-family: "Source Sans Pro", sans-serif;
+}
+
+.content {
+    margin-left: 280px;
+    margin-right: 10px;
+}
+
+.pro-sidebar {
+    position: fixed !important;
 }
 
 .app {
-  width: 100%;
-  margin: 0 auto;
+    display: flex;
+    position: relative;
 }
 
-.main-content {
-  padding-left: 1.7rem;
-  padding-right: 1.7rem;
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #e0e0e0;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.navbar {
+    background-color: white;
+    position: sticky;
+    top: 0;
+}
+
+.list-user-action a {
+    font-size: 16px;
+    height: 25px;
+    width: 25px;
+    line-height: 25px;
+    margin: 0 3px;
+    background: #e5f2ff;
+    color: #0084ff;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.paging-custom {
+    position: absolute;
+    left: 50%;
 }

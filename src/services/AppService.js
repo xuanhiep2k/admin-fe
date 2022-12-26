@@ -8,32 +8,32 @@ const config = {
     },
 };
 
-export function getAllPartners(body) {
-    const url = "/partner/getAllPartners";
+export function createApp(body) {
+    const url = "/app/create";
     return axios.post(url, body, config);
 }
 
-export function createPartner(body) {
-    const url = "/partner/create";
+export function updateApp(body) {
+    const url = "/app/update";
     return axios.post(url, body, config);
 }
 
-export function updatePartner(body) {
-    const url = "/partner/update";
+export function getAllApps(body) {
+    const url = "/app/getAllApps";
     return axios.post(url, body, config);
 }
 
-export function lockPartner(code) {
-    const url = "/partner/lock/";
+export function lockApp(code) {
+    const url = "/app/lockApp/";
     return axios.post(url + code, "", config);
 }
 
-export function unlockPartner(code) {
-    const url = "/partner/unlock/";
+export function unlockApp(code) {
+    const url = "/app/unlockApp/";
     return axios.post(url + code, "", config);
 }
 
-export function deletePartner(code) {
-    const url = "/partner/delete/";
+export function deleteApp(code) {
+    const url = "/app/deleteApp/";
     return axios.post(url + code, "", config);
 }

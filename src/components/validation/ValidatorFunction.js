@@ -19,11 +19,22 @@ const rules = [
         message: 'Tên không được để trống',
     },
     {
-        field: 'sizeRole',
-        method: 'isInt',
-        args: [{min: 0}],
-        validWhen: true,
-        message: 'Số lượng quyền nhập không hợp lệ',
+        field: 'appCode',
+        method: 'isEmpty',
+        validWhen: false,
+        message: 'Ứng dụng chưa được chọn',
+    },
+    {
+        field: 'path',
+        method: 'isEmpty',
+        validWhen: false,
+        message: 'Đường dẫn không được để trống',
+    },
+    {
+        field: 'type',
+        method: 'isEmpty',
+        validWhen: false,
+        message: 'Loại chưa được chọn',
     },
     // {
     //     field: 'address',

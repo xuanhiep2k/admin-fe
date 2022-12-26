@@ -18,13 +18,6 @@ const rules = [
         validWhen: false,
         message: 'Tên không được để trống',
     },
-    {
-        field: 'sizeRole',
-        method: 'isInt',
-        args: [{min: 0}],
-        validWhen: true,
-        message: 'Số lượng quyền nhập không hợp lệ',
-    },
     // {
     //     field: 'address',
     //     method: 'isEmpty',

@@ -1,14 +1,14 @@
-import "./partner.css"
+import "./apps.css"
 import React, {useEffect, useState} from 'react';
-import * as PartnerService from "../../services/PartnerService";
-import FormPartner from "../../components/form/FormPartner";
-import ModalPartner from "../../components/modal/ModalPartner";
-import * as model from "../../components/model/ModelPartner"
+import * as AppService from "../../services/AppService";
+import * as model from "../../components/model/ModelApp"
 import Navbar from "../../components/navbar/Navbar";
+import FormApp from "../../components/form/FormApp";
+import ModalApp from "../../components/modal/ModalApp";
 
-function Partner() {
-    const [partners, setPartners] = useState([])
-    let [partner, setPartner] = useState(model.Partner);
+function Apps() {
+    const [apps, setApps] = useState([])
+    let [app, setApp] = useState(model.App);
     const [isLoading, setIsLoading] = useState(false);
     const statusList = ["ACTIVE", "LOCKED"];
     const [totalElements, setTotalElements] = useState("");
@@ -20,19 +20,18 @@ function Partner() {
     const [act, setAct] = useState("");
 
     useEffect(() => {
-        setIsLoading(true);
-        getAllParners();
+        setIsLoading(true)
+        getAllApps();
     }, []);
-
     // set number page
     for (let i = 1; i <= totalPages; i++) {
         number.push(i)
     }
-    const getAllParners = () => {
-
+    const getAllApps = () => {
+        app.status = "";
         try {
-            PartnerService.getAllPartners(partner).then(response => {
-                setPartners(response.data.data.content)
+            AppService.getAllApps(app).then(response => {
+                setApps(response.data.data.content)
                 setTotalElements(response.data.data.totalElements)
                 setTotalPages(response.data.data.totalPages)
                 setIsLoading(false)
@@ -46,56 +45,51 @@ function Partner() {
     const handleCloseForm = () => {
         setShowForm(false);
         setIsLoading(true);
-        partner = model.Partner;
-        setPartner(partner);
-        getAllParners();
-    };
-
-    const handleCancelFrom = () => {
-        setShowForm(false);
-        setShowModal(false);
-        partner = model.Partner;
-        setPartner(partner);
+        app = model.App
+        setApp(app)
+        getAllApps();
     }
+
     const handleCloseModal = () => {
         setShowModal(false);
-        partner = model.Partner
-        setPartner(partner)
-        getAllParners();
+        setIsLoading(true);
+        app = model.App
+        setApp(app)
+        getAllApps();
     }
 
-    const handleShowForm = (e, partner, isAct) => {
+
+    const handleShowForm = (e, app, isAct) => {
         e.preventDefault()
         setAct(isAct)
-        setPartner(partner)
+        setApp(app)
         setShowForm(true);
     }
 
     const paginate = (e, i) => {
         e.preventDefault();
-        partner.pageNumber = i - 1;
+        app.pageNumber = i - 1;
         setActive(i)
-        setIsLoading(true)
-        getAllParners();
+        getAllApps();
     }
 
-    const handleShowModal = (e, partner, isAct) => {
+    const handleShowModal = (e, app, isAct) => {
         e.preventDefault()
         setAct(isAct)
-        setPartner(partner);
+        setApp(app);
         setShowModal(true);
     }
 
     const reload = (e) => {
         setIsLoading(true)
         e.preventDefault();
-        getAllParners();
+        getAllApps();
     }
 
     const handleChange = (e) => {
         const {name, value} = e.target;
-        setPartner(partner => ({
-            ...partner,
+        setApp(app => ({
+            ...app,
             [name]: value ? value : ""
         }))
     }
@@ -108,19 +102,27 @@ function Partner() {
 
     const handleCancel = () => {
         document.getElementById("myFormRef").reset();
-        setPartner(model.Partner);
+        setApp(model.App);
+    }
+
+    const handleCancelForm = () => {
+        app = model.App
+        setApp(app)
+        setShowModal(false);
+        setShowForm(false);
     }
     return (
-        <div className="searchPartner">
-            <Navbar title={"QUẢN LÝ ĐỐI TÁC"}/>
+        <div className="searchApp">
+            <Navbar title={"QUẢN LÝ ỨNG DỤNG"}/>
             {/*Form add and update car*/}
-            <FormPartner show={showForm} handleCancelFrom={handleCancelFrom} handleCloseForm={handleCloseForm}
-                         data={partner} act={act}/>
+            <FormApp show={showForm} handleCancelForm={handleCancelForm} handleCloseForm={handleCloseForm} data={app}
+                     act={act}/>
 
             {/*Modal*/}
-            <ModalPartner show={showModal} handleCloseModal={handleCloseModal} data={partner} act={act}/>
+            <ModalApp show={showModal} handleCancelForm={handleCancelForm} handleCloseModal={handleCloseModal}
+                      data={app} act={act}/>
 
-            {/*form search partners*/}
+            {/*form search apps*/}
             <form id={"myFormRef"} onSubmit={(e) => onSubmitSearch(e)}>
                 <div className="row">
                     <div className="col">
@@ -151,25 +153,24 @@ function Partner() {
                 </div>
             </form>
             <div className="d-flex justify-content-between">
-                <div className="btn-addpartner">
+                <div className="btn-addApp">
                     <a href="!/#" className="btn btn-brand btn-elevate"
                        onClick={(e) => reload(e)}>
                         <i className="bi bi-arrow-clockwise"/>Cập nhật</a>
                 </div>
-                <div className="btn-addpartner">
+                <div className="btn-addApp">
                     <a href="/#" className="btn btn-brand btn-elevate"
-                       onClick={(e) => handleShowForm(e, partner, "add")}>
+                       onClick={(e) => handleShowForm(e, app, "add")}>
                         <i className="bi bi-plus"/>Thêm mới</a>
                 </div>
             </div>
-            {/*Table show list partners*/}
+            {/*Table show list apps*/}
             <table className="table table-bordered table-hover">
                 <thead>
                 <tr className="table-primary text-center">
                     <th scope="col">#</th>
-                    <th scope="col">Mã đối tác</th>
-                    <th scope="col">Tên đối tác</th>
-                    <th scope="col">Số lượng quyền quản lý</th>
+                    <th scope="col">Mã ứng dụng</th>
+                    <th scope="col">Tên ứng dụng</th>
                     <th scope="col">Mô tả</th>
                     <th scope="col">Trạng thái</th>
                     <th scope="col">Chức năng</th>
@@ -177,48 +178,48 @@ function Partner() {
                 </thead>
 
                 <tbody>
-                {partners.length && !isLoading ?
-                    (partners.map((partner, index) => (
-                        <tr className="text-center" key={partner.code}>
+
+                {apps.length && !isLoading ?
+                    (apps.map((app, index) => (
+                        <tr className="text-center" key={app.code}>
                             <th scope="row">{index + 1}</th>
-                            <td>{partner.code}</td>
-                            <td>{partner.name}</td>
-                            <td>{partner.sizeRole}</td>
-                            <td>{partner.description}</td>
+                            <td>{app.code}</td>
+                            <td>{app.name}</td>
+                            <td>{app.description}</td>
                             < td>
-                                <span style={partner.status === "ACTIVE" ? {
-                                    "color": "blue", "fontWeight": "bold"
-                                } : {"color": "red", "fontWeight": "bold"}}>{partner.status}</span>
+                                 <span style={app.status === "ACTIVE" ? {
+                                     "color": "blue", "fontWeight": "bold"
+                                 } : {"color": "red", "fontWeight": "bold"}}>{app.status}</span>
                             </td>
                             <td>
-                                {partner.status === "ACTIVE" ?
+                                {app.status === "ACTIVE" ?
                                     <div className="list-user-action">
-                                        <a href="/#" className="mb-1 mr-1 text-bg-primary" title="Cập nhật đối tác"
-                                           onClick={(e) => handleShowForm(e, partner, "update")}>
+                                        <a href="/#" className="mb-1 mr-1 text-bg-primary" title="Cập nhật chức năng"
+                                           onClick={(e) => handleShowForm(e, app, "update")}>
                                             <i className="bi bi-pencil-fill"/>
                                         </a>
-                                        <a href="/#" className="mb-1 mr-1 text-bg-warning" title="Khoá đối tác"
-                                           onClick={(e) => handleShowModal(e, partner, "lock")}>
+                                        <a href="/#" className="mb-1 mr-1 text-bg-warning" title="Khoá chức năng"
+                                           onClick={(e) => handleShowModal(e, app, "lock")}>
                                             <i className="bi bi-lock"/>
                                         </a>
                                     </div> :
                                     <div className="align-items-center justify-content-center list-user-action">
                                         <a href="/#" className="mb-1 mr-1 text-bg-warning"
-                                           title="Mở khoá đối tác"
-                                           onClick={(e) => handleShowModal(e, partner, "unlock")}>
+                                           title="Mở khoá chức năng"
+                                           onClick={(e) => handleShowModal(e, app, "unlock")}>
                                             <i className="bi bi-unlock"/>
                                         </a>
-                                        <a href="/#" className="mb-1 mr-1 text-bg-danger" title="Xoá đối tác"
-                                           onClick={(e) => handleShowModal(e, partner, "delete")}>
+                                        <a href="/#" className="mb-1 mr-1 text-bg-danger" title="Xoá chức năng"
+                                           onClick={(e) => handleShowModal(e, app, "delete")}>
                                             <i className="bi bi-trash"/>
                                         </a>
                                     </div>}
                             </td>
                         </tr>
                     ))) : ""}
-                {partners.length === 0 && !isLoading ? (<tr className="no-search">
-                    <td colSpan="8" className="text-center">
-                        Không có đối tác tìm thấy
+                {apps.length === 0 && !isLoading ? (<tr className="no-search">
+                    <td colSpan="6" className="text-center">
+                        Không có ứng dụng tìm thấy
                     </td>
                 </tr>) : ""}
                 </tbody>
@@ -259,4 +260,4 @@ function Partner() {
     );
 }
 
-export default Partner;
+export default Apps;

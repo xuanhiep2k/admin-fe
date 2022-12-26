@@ -1,20 +1,20 @@
 import 'react-notifications/lib/notifications.css';
 import React, {useEffect, useState} from 'react';
 import {Button, Form, Modal} from "react-bootstrap";
-import * as rules from '../validation/ValidatorPartner'
+import * as rules from '../validation/ValidatorApp'
 import Validator from "../../utils/Validator";
-import * as PartnerService from '../../services/PartnerService'
+import * as AppService from '../../services/AppService'
 import {NotificationContainer, NotificationManager} from 'react-notifications';
-import * as model from "../../components/model/ModelPartner"
+import * as model from "../../components/model/ModelApp"
 
-const FormPartner = ({show, handleCancelFrom, handleCloseForm, data, act}) => {
+const FormApp = ({show, handleCancelForm, handleCloseForm, data, act}) => {
     const [errors, setErrors] = useState("")
     const [showForm, setShowForm] = useState(show)
     const [isLoading, setIsLoading] = useState(false)
-    const [partner, setPartner] = useState(model.Partner);
+    const [app, setApp] = useState(model.App);
     const validator = new Validator(rules);
     useEffect(() => {
-        setPartner({
+        setApp({
             "code": data ? data.code : "",
             "name": data ? data.name : "",
             "description": data ? data.description : "",
@@ -25,15 +25,15 @@ const FormPartner = ({show, handleCancelFrom, handleCloseForm, data, act}) => {
     }, [show, data])
     const onChange = (e) => {
         const {name = "", value = ""} = e.target;
-        setPartner(partner => ({
-            ...partner,
+        setApp(app => ({
+            ...app,
             [name]: value ? value : ""
         }))
     }
 
     function functionClose() {
         setErrors({});
-        handleCancelFrom();
+        handleCancelForm();
     }
 
     const submitSucess = () => {
@@ -41,29 +41,28 @@ const FormPartner = ({show, handleCancelFrom, handleCloseForm, data, act}) => {
         handleCloseForm();
     }
     const handleSubmitForm = async () => {
-        partner.sizeRole = partner.sizeRole + "";
-        setPartner(partner)
-        if (Object.keys(validator.validate(partner)).length !== 0) {
-            setErrors(validator.validate(partner))
+        if (Object.keys(validator.validate(app)).length !== 0) {
+            setErrors(validator.validate(app))
 
         } else {
             setIsLoading(true);
+
             try {
                 if (act === "add") {
-                    PartnerService.createPartner(partner).then(response => {
+                    AppService.createApp(app).then(response => {
                         if (response.data.code === "201") {
                             submitSucess();
-                            NotificationManager.success("Thêm đối tác thành công")
+                            NotificationManager.success("Thêm ứng dụng thành công")
                         }
                     }, errors => {
                         setIsLoading(false)
                         NotificationManager.error(errors.response.data.message)
                     })
                 } else if (act === "update") {
-                    PartnerService.updatePartner(partner).then(response => {
+                    AppService.updateApp(app).then(response => {
                         if (response.data.code === "200") {
                             submitSucess();
-                            NotificationManager.success("Cập nhật đối tác thành công")
+                            NotificationManager.success("Cập nhật ứng dụng thành công")
                         }
                     }, errors => {
                         setIsLoading(false)
@@ -82,7 +81,7 @@ const FormPartner = ({show, handleCancelFrom, handleCloseForm, data, act}) => {
             <>
                 <Modal show={showForm} onHide={functionClose}>
                     <Modal.Header>
-                        <Modal.Title>Nhập thông tin đối tác</Modal.Title>
+                        <Modal.Title>Nhập thông tin ứng dụg</Modal.Title>
                         <button type="button" className="close" data-dismiss="modal" onClick={functionClose}
                                 aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -91,21 +90,21 @@ const FormPartner = ({show, handleCancelFrom, handleCloseForm, data, act}) => {
                     <Modal.Body>
                         <Form>
                             <Form.Group className="mb-3" controlId="formCode">
-                                <Form.Label>Nhập mã đối tác:</Form.Label>
+                                <Form.Label>Nhập mã ứng dụng:</Form.Label>
                                 <Form.Control disabled={act === "update"} type="text" aria-valuemin={3}
-                                              aria-valuemax={20} placeholder="Mã đối tác"
+                                              aria-valuemax={20} placeholder="Mã ứng dụng"
                                               name="code"
                                               onChange={onChange}
-                                              value={partner.code}/>
+                                              value={app.code}/>
                                 {errors.code &&
                                 <div className="validation" style={{"color": "red"}}>{errors.code}</div>}
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formName">
-                                <Form.Label>Nhập tên đối tác:</Form.Label>
-                                <Form.Control type="text" placeholder="Tên đối tác"
+                                <Form.Label>Nhập tên ứng dụng:</Form.Label>
+                                <Form.Control type="text" placeholder="Tên ứng dụng"
                                               onChange={onChange}
                                               name="name"
-                                              value={partner.name}/>
+                                              value={app.name}/>
                                 {errors.name &&
                                 <div className="validation" style={{"color": "red"}}>{errors.name}</div>}
                             </Form.Group>
@@ -114,17 +113,7 @@ const FormPartner = ({show, handleCancelFrom, handleCloseForm, data, act}) => {
                                 <Form.Control type="text" placeholder="Mô tả"
                                               name="description"
                                               onChange={onChange}
-                                              value={partner.description}/>
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="formSizeRole">
-                                <Form.Label>Nhập số lượng quyền:</Form.Label>
-                                <Form.Control type="number" aria-valuemin="0" placeholder="Số lượng quyền"
-                                              name="sizeRole"
-                                              onChange={onChange}
-                                              pat
-                                              value={partner.sizeRole}/>
-                                {errors.sizeRole &&
-                                <div className="validation" style={{"color": "red"}}>{errors.sizeRole}</div>}
+                                              value={app.description}/>
                             </Form.Group>
                         </Form>
                     </Modal.Body>
@@ -152,4 +141,4 @@ const FormPartner = ({show, handleCancelFrom, handleCloseForm, data, act}) => {
     );
 }
 
-export default FormPartner;
+export default FormApp;
