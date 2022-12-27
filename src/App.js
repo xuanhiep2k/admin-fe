@@ -11,6 +11,8 @@ import {ColorModeContext, useMode} from "./theme";
 import SideBar from "./components/sidebar/SideBar";
 import * as LoginService from "./services/LoginService";
 import Home from "./pages/home/Home";
+import Test from "./components/form/Test";
+import Role from "./pages/role/Role";
 
 function App() {
     const [theme, colorMode] = useMode();
@@ -29,8 +31,10 @@ function App() {
                                 <Route path='/function' element={isLoggedIn ? <Function/> : <Navigate to='/login'/>}/>
                                 <Route path='/user' element={isLoggedIn ? <User/> : <Navigate to='/login'/>}/>
                                 <Route path='/partner' element={isLoggedIn ? <Partner/> : <Navigate to='/login'/>}/>
+                                <Route path='/role' element={isLoggedIn ? <Role/> : <Navigate to='/login'/>}/>
                                 <Route path='/app' element={isLoggedIn ? <Apps/> : <Navigate to='/login'/>}/>
                                 <Route path='/login' element={!isLoggedIn ? <Login/> : <Navigate to='/'/>}/>
+                                <Route path='/test' element={isLoggedIn ? <Test/> : <Navigate to='/login'/>}/>
                                 {/*<Route path='/chooseCar' element={<ChooseCar/>}/>*/}
                                 {/*<Route path='/contract' element={<Contract/>}/>*/}
                                 {/*<Route path='/car' element={<Car/>}/>*/}

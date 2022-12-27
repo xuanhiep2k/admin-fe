@@ -18,6 +18,7 @@ const FormFunction = ({show, handleCancelForm, handleCloseForm, data, act}) => {
     const validator = new Validator(rules);
     useEffect(() => {
         modelApp.App.status = "ACTIVE";
+        modelApp.App.pageSize = 0;
         getAllApps(modelApp.App).then(response => {
             setApps(response.data.data.content)
         })
@@ -28,6 +29,7 @@ const FormFunction = ({show, handleCancelForm, handleCloseForm, data, act}) => {
                 "description": data ? data.description : "",
                 "appCode": data ? data.appCode : "",
                 "type": data ? data.type : "",
+                "parentCode": data ? data.parentCode : "",
                 "icon": data ? data.icon : "",
                 "path": data ? data.path : "",
             })

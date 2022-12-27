@@ -36,6 +36,8 @@ function Function() {
     }
 
     const getTreeNode = () => {
+        func.status = "";
+        setFunc(func);
         try {
             FunctionService.getTree(func).then(response => {
                 setGetTree(response.data.data.content);

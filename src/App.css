@@ -66,3 +66,9 @@ body,
     position: absolute;
     left: 50%;
 }
+
+dropdownStyle {
+    max-height: 400px;
+    overflow: auto;
+    z-index: 100000;
+}
