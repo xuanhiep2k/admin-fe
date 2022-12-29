@@ -3,7 +3,6 @@ import {Box, IconButton, useTheme} from "@mui/material";
 import {useContext} from "react";
 import {ColorModeContext, tokens} from "../../theme";
 import InputBase from "@mui/material/InputBase";
-import {useNavigate} from 'react-router-dom';
 
 import Avatar from '@mui/material/Avatar';
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";

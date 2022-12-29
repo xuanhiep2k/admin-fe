@@ -6,6 +6,7 @@ export let User = {
     "password": "",
     "roles": [],
     "status": "",
+    "avatar": "",
     "partnerCode": "",
     "departmentCode": "",
     "pageNumber": 0,

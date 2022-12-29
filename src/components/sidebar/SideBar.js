@@ -1,17 +1,23 @@
 import './sidebar.css'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Menu, ProSidebar, MenuItem,} from "react-pro-sidebar";
 import {Link} from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import {Box, IconButton, Typography, useTheme} from "@mui/material";
 import {tokens} from "../../theme";
-
+import * as UserService from "../../services/UserService"
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import {AccessibilityNew, Apps, DeviceHub, HomeWork, Speed, SyncAlt} from "@material-ui/icons";
 import {Handshake} from "@mui/icons-material";
 
 function SideBar() {
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [selected, setSelected] = useState("Trang chủ");
+    const [img, setImg] = useState();
+    const [user, setUser] = useState({});
 
     const Item = ({title, to, icon, selected, setSelected}) => {
         const theme = useTheme();
@@ -24,11 +30,18 @@ function SideBar() {
             </MenuItem>
         );
     };
+    useEffect(() => {
+        UserService.getCurrentUserInfo().then(response => {
+            setUser(response.data.data)
+            UserService.fetchImageAsBase64(response.data.data.avatar).then((base64String) => {
+                setImg(base64String)
+            });
+        })
 
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    const [isCollapsed, setIsCollapsed] = useState(false);
-    const [selected, setSelected] = useState("Trang chủ");
+        // Get Avatar
+
+    }, [])
+
     const onClappse = () => {
         setIsCollapsed(!isCollapsed)
         isCollapsed ? (document.getElementById("content").style.marginLeft = "280px") :
@@ -73,17 +86,18 @@ function SideBar() {
                     {!isCollapsed ? (
                         <Box>
                             <Box display="flex" justifyContent="center" alignItems="center">
-                                <img alt="profile-user" width="100px" height="100px" src={`../../assets/user.png`}
+                                <img alt="profile-user" width="150px" height="150px"
+                                     src={img} title={JSON.parse(localStorage.getItem("user")).fullName}
                                      style={{cursor: "pointer", borderRadius: "50%"}}
                                 />
                             </Box>
                             <Box textAlign="center">
                                 <Typography variant="h2" color={colors.grey[100]} fontWeight="bold"
                                             sx={{m: "10px 0 0 0"}}>
-                                    Ed Roh
+                                    {JSON.parse(localStorage.getItem("user")).fullName}
                                 </Typography>
                                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                                    VP Fancy Admin
+                                    {JSON.parse(localStorage.getItem("user")).email}
                                 </Typography>
                             </Box>
                         </Box>

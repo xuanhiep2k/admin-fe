@@ -34,6 +34,7 @@ function Role() {
         try {
             RoleService.getAllRoles(role).then(response => {
                 setRoles(response.data.data.content)
+                console.log(response.data.data.content)
                 setTotalElements(response.data.data.totalElements)
                 setTotalPages(response.data.data.totalPages)
                 setIsLoading(false)

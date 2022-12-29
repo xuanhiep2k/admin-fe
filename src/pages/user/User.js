@@ -26,7 +26,6 @@ function User() {
     for (let i = 1; i <= totalPages; i++) {
         number.push(i)
     }
-
     const handleCloseForm = () => {
         setShowForm(false);
         setIsLoading(true);
@@ -34,7 +33,6 @@ function User() {
         setUser(user);
         getAllUsers();
     };
-
     const handleShowModal = (e, user, isAct) => {
         e.preventDefault()
         setAct(isAct)
@@ -43,7 +41,7 @@ function User() {
     }
 
 
-    const handleCancelFrom = () => {
+    const handleCancelForm = () => {
         setShowForm(false);
         setShowModal(false);
         user = model.User;
@@ -57,13 +55,13 @@ function User() {
                 setTotalElements(response.data.data.totalElements)
                 setTotalPages(response.data.data.totalPages)
                 setIsLoading(false)
+
             })
         } catch (error) {
             setTimeout(() => {
             }, 5000);
         }
     }
-
 
     const paginate = async (e, i) => {
         e.preventDefault();
@@ -77,7 +75,7 @@ function User() {
         getAllUsers();
     }
 
-    function handleShowForm(e, partner, isAct) {
+    function handleShowForm(e, user, isAct) {
         e.preventDefault()
         setAct(isAct)
         setUser(user)
@@ -88,9 +86,8 @@ function User() {
         <div className="searchuser">
             <Navbar title={"QUẢN LÝ NGƯỜI DÙNG"}/>
             {/*Form add and update car*/}
-            <FormUser show={showForm} handleCancelFrom={handleCancelFrom} handleCloseForm={handleCloseForm} data={user}
+            <FormUser show={showForm} handleCancelForm={handleCancelForm} handleCloseForm={handleCloseForm} data={user}
                       act={act}/>
-
             {/*/!*form search users*!/*/}
             {/*<div className="form-search">*/}
             {/*    <form onSubmit={(e) => paginate(e, 1)} className="input-group mb-3">*/}
@@ -128,6 +125,7 @@ function User() {
                     <th scope="col">Email</th>
                     <th scope="col">Số điện thoại</th>
                     <th scope="col">Danh sách Role</th>
+                    <th scope="col">Avatar</th>
                     <th scope="col">Trạng thái</th>
                     <th scope="col">Chức năng</th>
                 </tr>
@@ -148,29 +146,34 @@ function User() {
                                     "color": "blue", "fontWeight": "bold"
                                 } : {"color": "red", "fontWeight": "bold"}}>{user.status}</span>
                             </td>
+                            <td>{user.avatar}</td>
                             <td>
-                                {user.status === "ACTIVE" ?
-                                    <div className="list-user-action">
-                                        <a href="/#" className="mb-1 mr-1 text-bg-primary" title="Cập nhật người dùng"
-                                           onClick={(e) => handleShowForm(e, user, "update")}>
-                                            <i className="bi bi-pencil-fill"/>
-                                        </a>
-                                        <a href="/#" className="mb-1 mr-1 text-bg-warning" title="Khoá người dùng"
-                                           onClick={(e) => handleShowModal(e, user, "lock")}>
-                                            <i className="bi bi-lock"/>
-                                        </a>
-                                    </div> :
-                                    <div className="align-items-center justify-content-center list-user-action">
-                                        <a href="/#" className="mb-1 mr-1 text-bg-warning"
-                                           title="Mở khoá người dùng"
-                                           onClick={(e) => handleShowModal(e, user, "unlock")}>
-                                            <i className="bi bi-unlock"/>
-                                        </a>
-                                        <a href="/#" className="mb-1 mr-1 text-bg-danger" title="Xoá người dùng"
-                                           onClick={(e) => handleShowModal(e, user, "delete")}>
-                                            <i className="bi bi-trash"/>
-                                        </a>
-                                    </div>}
+                                {user.status === "ACTIVE" &&
+                                <div className="list-user-action">
+                                    <a href="/#" className="mb-1 mr-1 text-bg-primary" title="Cập nhật người dùng"
+                                       onClick={(e) => handleShowForm(e, user, "update")}>
+                                        <i className="bi bi-pencil-fill"/>
+                                    </a>
+                                    <a href="/#" className="mb-1 mr-1 text-bg-warning" title="Khoá người dùng"
+                                       onClick={(e) => handleShowModal(e, user, "lock")}>
+                                        <i className="bi bi-lock"/>
+                                    </a>
+                                </div>}
+                                {user.status !== "ACTIVE" &&
+                                <div className="align-items-center justify-content-center list-user-action">
+                                    <a href="/#" className="mb-1 mr-1 text-bg-warning"
+                                       title="Mở khoá người dùng"
+                                       onClick={(e) => handleShowModal(e, user, "unlock")}>
+                                        <i className="bi bi-unlock"/>
+                                    </a>
+                                    {user.username !== "admin" &&
+                                    <a href="/#" className="mb-1 mr-1 text-bg-danger" title="Xoá người dùng"
+                                       onClick={(e) => handleShowModal(e, user, "delete")}>
+                                        <i className="bi bi-trash"/>
+                                    </a>
+                                    }
+                                </div>
+                                }
                             </td>
                         </tr>
                     ))) : ""}

@@ -67,8 +67,27 @@ body,
     left: 50%;
 }
 
-dropdownStyle {
-    max-height: 400px;
-    overflow: auto;
-    z-index: 100000;
+.ant-select-selector {
+    min-height: 38px;
+}
+
+#basic-addon1 {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+
+.input-group-text {
+
 }
