@@ -24,6 +24,21 @@ export function getAllFunctions(body) {
     return axios.post(url, body, config);
 }
 
+export function getFunctionByRoleCode(roles) {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("accessToken"),
+        },
+        params: {
+            roles: roles.join(",")
+        }
+    };
+    const url = "/function/getFunctionByRoleCode";
+    return axios.get(url, config);
+}
+
 export function getTree(body) {
     const url = "/function/getTree";
     return axios.post(url, body, config);

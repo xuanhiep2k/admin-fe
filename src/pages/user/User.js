@@ -154,10 +154,11 @@ function User() {
                                        onClick={(e) => handleShowForm(e, user, "update")}>
                                         <i className="bi bi-pencil-fill"/>
                                     </a>
+                                    {user.username !== "admin" &&
                                     <a href="/#" className="mb-1 mr-1 text-bg-warning" title="Khoá người dùng"
                                        onClick={(e) => handleShowModal(e, user, "lock")}>
                                         <i className="bi bi-lock"/>
-                                    </a>
+                                    </a>}
                                 </div>}
                                 {user.status !== "ACTIVE" &&
                                 <div className="align-items-center justify-content-center list-user-action">
@@ -170,8 +171,7 @@ function User() {
                                     <a href="/#" className="mb-1 mr-1 text-bg-danger" title="Xoá người dùng"
                                        onClick={(e) => handleShowModal(e, user, "delete")}>
                                         <i className="bi bi-trash"/>
-                                    </a>
-                                    }
+                                    </a>}
                                 </div>
                                 }
                             </td>

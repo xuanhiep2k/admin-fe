@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Box, IconButton, useTheme} from "@mui/material";
 import {useContext} from "react";
 import {ColorModeContext, tokens} from "../../theme";
@@ -20,6 +20,8 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import * as UserService from "../../services/UserService";
+import {AccountCircle} from "@material-ui/icons";
 
 const Navbar = ({title}) => {
     const theme = useTheme();
@@ -27,6 +29,20 @@ const Navbar = ({title}) => {
     const colorMode = useContext(ColorModeContext);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const [img, setImg] = useState();
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        UserService.getCurrentUserInfo().then(response => {
+            setUser(response.data.data)
+            if (response.data.data.avatar.length !== 0) {
+                UserService.fetchImageAsBase64(response.data.data.avatar).then((base64String) => {
+                    setImg(base64String)
+                });
+            }
+        })
+    }, [])
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
 
@@ -64,11 +80,15 @@ const Navbar = ({title}) => {
                     <IconButton>
                         <SettingsOutlinedIcon/>
                     </IconButton>
-                    <Tooltip title="Account settings">
+                    <Tooltip title="Tài khoản">
                         <IconButton onClick={handleClick} aria-controls={open ? 'account-menu' : undefined}
                                     aria-haspopup="true"
                                     aria-expanded={open ? 'true' : undefined}>
-                            <PersonOutlinedIcon></PersonOutlinedIcon>
+                            {user.avatar !== null ?
+                                <img width="22px" height="22px" src={img}
+                                     style={{cursor: "pointer", borderRadius: "50%"}}/> :
+                                <AccountCircle/>}
+
                         </IconButton>
                     </Tooltip>
                     <Menu anchorEl={anchorEl} id="account-menu"

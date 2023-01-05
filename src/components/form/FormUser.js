@@ -211,8 +211,7 @@ const FormUser: React.FC = ({show, handleCancelForm, handleCloseForm, data, act}
                                             <Form.Control type={showPass ? "text" : "password"} placeholder="Password"
                                                           onChange={onChangeInput}
                                                           name="password"
-                                                          disabled={act === "update"}
-                                                          value={user.password}/>
+                                                          disabled={act === "update"}/>
                                             <span onClick={showOrHidePass} id="basic-addon1">
                                                 {showPass ? <VisibilityOff/> : <Visibility/>}</span>
                                         </InputGroup>
