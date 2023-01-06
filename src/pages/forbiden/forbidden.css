@@ -1,11 +1,18 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
 .forbidden {
+    position: relative;
     margin: auto;
 }
 
+#forbidden #root .app #content {
+    margin: 0 auto;
+    align-items: center;
+    display: flex;
+    width: auto;
+}
+
 * {
-    position: relative;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -26,6 +33,7 @@ h1 {
 }
 
 .lock {
+    position: relative;
     border-radius: 5px;
     width: 55px;
     height: 45px;

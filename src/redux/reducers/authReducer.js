@@ -10,7 +10,8 @@ export const getAuthReducer = (state = { isAuth: {} }, action) => {
     case actionTypes.GET_AUTH_SUCCESS:
       return {
         loading: false,
-        isAuth: action.payload
+        isAuth: action.payload,
+        userCurrent:action.userCurrent
       };
     case actionTypes.GET_AUTH_FAIL:
       return {

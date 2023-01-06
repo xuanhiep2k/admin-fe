@@ -1,12 +1,12 @@
 import * as actionTypes from "../constants/partnerConstant";
-import { getAllPartners } from "../../services/PartnerService";
+import * as PartnerService from "../../services/PartnerService";
 
 export const getALlPartners = (body) => async (dispatch) => {
   try {
     dispatch({
       type: actionTypes.GET_PARTNERS_REQUEST
     });
-    const { data } = await getAllPartners(body);
+    const { data } = await PartnerService.getAllPartners(body);
     dispatch({
       type: actionTypes.GET_PARTNERS_SUCCESS,
       payload: data.data.content,

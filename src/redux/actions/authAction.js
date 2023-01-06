@@ -11,11 +11,12 @@ export const getAuth = () => async (dispatch) => {
     const userCurrent = await getCurrentUserInfo();
     const functions = await getFunctionByRoleCode(userCurrent.data.data.roles);
     functions.data.data.map(func => {
-      functionCodes.push(func.code);
+      return functionCodes.push(func.code);
     });
     dispatch({
       type: actionTypes.GET_AUTH_SUCCESS,
-      payload: functionCodes.join(",")
+      payload: functionCodes.join(","),
+      userCurrent: userCurrent.data.data
     });
   } catch (error) {
     dispatch({

@@ -3,14 +3,16 @@ import * as UserService from "../../services/UserService";
 import FormUser from "../../components/form/FormUser";
 import * as model from "../../components/model/ModelUser";
 import Navbar from "../../components/navbar/Navbar";
+import { useDispatch, useSelector } from "react-redux";
+import { getALlUsers } from "../../redux/actions/userAction";
+
 
 function User() {
-    const [users, setUsers] = useState([])
+    const dispatch = useDispatch();
+    const { loading, error, users, totalElements, totalPages } = useSelector((state) => (state.getUsers));
+    const { isAuth } = useSelector((state) => state.getAuth);
     let [user, setUser] = useState(model.User);
-    const [isLoading, setIsLoading] = useState(false);
     const statusList = ["ACTIVE", "LOCKED"];
-    const [totalElements, setTotalElements] = useState("");
-    const [totalPages, setTotalPages] = useState("");
     const [active, setActive] = useState(1);
     const number = [];
     const [showForm, setShowForm] = useState(false);
@@ -18,7 +20,6 @@ function User() {
     const [act, setAct] = useState("");
 
     useEffect(() => {
-        setIsLoading(true);
         getAllUsers();
     }, []);
 
@@ -28,7 +29,6 @@ function User() {
     }
     const handleCloseForm = () => {
         setShowForm(false);
-        setIsLoading(true);
         user = model.User;
         setUser(user);
         getAllUsers();
@@ -40,7 +40,6 @@ function User() {
         setShowModal(true);
     }
 
-
     const handleCancelForm = () => {
         setShowForm(false);
         setShowModal(false);
@@ -49,28 +48,15 @@ function User() {
     }
 
     const getAllUsers = () => {
-        try {
-            UserService.getAllUsers(user).then(response => {
-                setUsers(response.data.data.content)
-                setTotalElements(response.data.data.totalElements)
-                setTotalPages(response.data.data.totalPages)
-                setIsLoading(false)
-
-            })
-        } catch (error) {
-            setTimeout(() => {
-            }, 5000);
-        }
+        dispatch(getALlUsers(user));
     }
 
     const paginate = async (e, i) => {
         e.preventDefault();
         setActive(i)
-
     }
 
     const reload = (e) => {
-        setIsLoading(true)
         e.preventDefault();
         getAllUsers();
     }
@@ -132,7 +118,7 @@ function User() {
                 </thead>
 
                 <tbody>
-                {users.length && !isLoading ?
+                {users.length && !loading ?
                     (users.map((user, index) => (
                         <tr className="text-center" key={user.username}>
                             <th scope="row">{index + 1}</th>
@@ -177,14 +163,14 @@ function User() {
                             </td>
                         </tr>
                     ))) : ""}
-                {users.length === 0 && !isLoading ? (<tr className="no-search">
+                {users.length === 0 && !loading ? (<tr className="no-search">
                     <td colSpan="8" className="text-center">
                         Không có người dùng tìm thấy
                     </td>
                 </tr>) : ""}
                 </tbody>
             </table>
-            {isLoading ? (
+            {loading ? (
                 <span className="spinner-border spinner-border-sm"
                       role="status" aria-hidden="true"/>) : ""}
             (Trang {active}/{totalPages}) (Tổng {totalElements} kết quả)

@@ -18,8 +18,6 @@ html {
     max-width: 500px;
     min-width: 300px;
     max-height: 700px;
-    width: 30%;
-    height: 60%;
     margin: 100px auto;
     background-color: #FFFFFF;
     border-radius: 25px;
@@ -130,7 +128,6 @@ html {
 
 #alternativeLogin {
     text-align: center;
-    padding-top: 2rem;
     margin-top: 1.5rem;
 }
 

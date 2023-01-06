@@ -1,19 +1,17 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route, Redirect, Navigate, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import User from "./pages/user/User";
 import Login from "./pages/login/Login";
 import Partner from "./pages/partner/Partner";
 import Function from "./pages/function/Function";
 import Apps from "./pages/app/Apps";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import SideBar from "./components/sidebar/SideBar";
 import * as LoginService from "./services/LoginService";
 import Home from "./pages/home/Home";
-import Test from "./components/form/Test";
 import Role from "./pages/role/Role";
-import { checkPermission } from "./redux/checkPermission";
 import Forbiden from "./pages/forbiden/Forbidden";
 
 //import Actions
@@ -35,35 +33,37 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter forceRefresh={true}>
-          {loading ? <LoadingPage /> : <>
-            <div className="app">
-              {isAuth.length && !isAuth.includes(url) ?
-                <>
+          {loading ? <LoadingPage /> :
+            <>
+              <div className="app">
+                {isAuth && isAuth.length && isAuth.includes(url) && isLoggedIn && <SideBar />}
+                <main id="content" className="content">
                   <Routes>
-                    <Route path={`/${url}`} element={<Forbiden />} />
-                    <Route path="/forbidden" element={<Forbiden />} />
+                    {isLoggedIn ?
+                      <>
+                        {isAuth && isAuth.length && !isAuth.includes(url) ?
+                          <>
+                            <Route exact path="/forbidden" element={<Forbiden />} />
+                            <Route path={`/${url}`} element={<Navigate to="/forbidden" />} />
+                          </> :
+                          <>
+                            <Route exact path="/" element={<Home />} />
+                            <Route path="/function" element={<Function />} />
+                            <Route path="/user" element={<User />} />
+                            <Route path="/partner" element={<Partner />} />
+                            <Route path="/role" element={<Role />} />
+                            <Route path="/app" element={<Apps />} />
+                            <Route path="/login" element={<Navigate to="/" />} />
+                          </>}
+                      </> :
+                      <>
+                        <Route exact path="/login" element={<Login />} />
+                        <Route path="*" element={<Navigate to="/login" />} />
+                      </>}
                   </Routes>
-                </>
-                : <>
-                  {isLoggedIn && <SideBar />}
-                  <main id="content" className="content">
-                    <Routes>
-                      <Route exact path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
-                      <Route path="/function" element={<Function />} />
-                      <Route path="/user" element={<User />} />
-                      <Route path="/partner" element={<Partner />} />
-                      <Route path="/role" element={<Role />} />
-                      <Route path="/app" element={<Apps />} />
-                      <Route path="/login" element={!isLoggedIn ? <Login /> : <Navigate to="/" />} />
-                      <Route path="/test" element={isLoggedIn ? <Test /> : <Navigate to="/login" />} />
-                      {/*<Route path='/forbiden' element={<Forbiden/>}/>*/}
-                      {/*<Route path='/contract' element={<Contract/>}/>*/}
-                      {/*<Route path='/car' element={<Car/>}/>*/}
-                    </Routes>
-                  </main>
-                </>}
-            </div>
-          </>}
+                </main>
+              </div>
+            </>}
         </BrowserRouter>
       </ThemeProvider>
     </ColorModeContext.Provider>

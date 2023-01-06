@@ -1,7 +1,5 @@
 import "./partner.css";
 import React, { useEffect, useState } from "react";
-import * as PartnerService from "../../services/PartnerService";
-import * as FunctionService from "../../services/FunctionService";
 import FormPartner from "../../components/form/FormPartner";
 import ModalPartner from "../../components/modal/ModalPartner";
 import * as model from "../../components/model/ModelPartner";
@@ -14,8 +12,8 @@ import { getAuth as getIsAuth } from "../../redux/actions/authAction";
 
 function Partner() {
   const dispatch = useDispatch();
-  const getPartners = useSelector((state) => (state.getPartners));
-  const { loading, error, partners, totalElements, totalPages } = getPartners;
+  const { loading, error, partners, totalElements, totalPages } = useSelector((state) => (state.getPartners));
+  const { isAuth } = useSelector((state) => state.getAuth);
   let [partner, setPartner] = useState(model.Partner);
   const statusList = ["ACTIVE", "LOCKED"];
   const [active, setActive] = useState(1);
@@ -153,7 +151,7 @@ function Partner() {
             <i className="bi bi-arrow-clockwise" />Cập nhật</a>
         </div>
 
-        {isPermission && isPermission.includes("partner_create") &&
+        {isAuth && isAuth.length && isAuth.includes("partner_create") &&
         <div className="btn-addpartner">
           <a href="/#" className="btn btn-brand btn-elevate"
              onClick={(e) => handleShowForm(e, partner, "add")}>
@@ -192,26 +190,29 @@ function Partner() {
               <td>
                 {partner.status === "ACTIVE" ?
                   <div className="list-user-action">
-                    {isPermission && isPermission.includes("partner_update") &&
+                    {isAuth && isAuth.length && isAuth.includes("partner_update") &&
                     <a href="/#" className="mb-1 mr-1 text-bg-primary" title="Cập nhật đối tác"
                        onClick={(e) => handleShowForm(e, partner, "update")}>
                       <i className="bi bi-pencil-fill" />
                     </a>}
+                    {isAuth && isAuth.length && isAuth.includes("partner_lock") &&
                     <a href="/#" className="mb-1 mr-1 text-bg-warning" title="Khoá đối tác"
                        onClick={(e) => handleShowModal(e, partner, "lock")}>
                       <i className="bi bi-lock" />
-                    </a>
+                    </a>}
                   </div> :
                   <div className="align-items-center justify-content-center list-user-action">
+                    {isAuth && isAuth.length && isAuth.includes("partner_unlock") &&
                     <a href="/#" className="mb-1 mr-1 text-bg-warning"
                        title="Mở khoá đối tác"
                        onClick={(e) => handleShowModal(e, partner, "unlock")}>
                       <i className="bi bi-unlock" />
-                    </a>
+                    </a>}
+                    {isAuth && isAuth.length && isAuth.includes("partner_delete") &&
                     <a href="/#" className="mb-1 mr-1 text-bg-danger" title="Xoá đối tác"
                        onClick={(e) => handleShowModal(e, partner, "delete")}>
                       <i className="bi bi-trash" />
-                    </a>
+                    </a>}
                   </div>}
               </td>
             </tr>

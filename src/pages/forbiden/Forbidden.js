@@ -2,6 +2,8 @@ import React from "react";
 import "./forbidden.css";
 
 function Forbidden() {
+  document.body.id = "forbidden";
+
   return (
     <div className="forbidden">
       <div className="lock"></div>

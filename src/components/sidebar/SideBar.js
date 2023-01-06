@@ -10,22 +10,23 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import { AccessibilityNew, Apps, DeviceHub, HomeWork, Speed, SyncAlt } from "@material-ui/icons";
 import { Handshake } from "@mui/icons-material";
-import { checkPermission } from "../../redux/checkPermission";
+import { useSelector } from "react-redux";
 
 function SideBar() {
+  const url = window.location.href.split("/").slice(3, 4).toString();
+  const { loading, isAuth } = useSelector((state) => state.getAuth);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Trang chủ");
+  const [selected, setSelected] = useState(`/${url}`);
   const [img, setImg] = useState();
   const [user, setUser] = useState({});
-  const [isPermission, setIsPermission] = useState();
 
   const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     return (
-      <MenuItem active={selected === title} style={{ color: colors.grey[100] }} onClick={() => setSelected(title)}
+      <MenuItem active={selected === to} style={{ color: colors.grey[100] }} onClick={() => setSelected(to)}
                 icon={icon}>
         <Typography>{title}</Typography>
         <Link to={to} />
@@ -33,16 +34,13 @@ function SideBar() {
     );
   };
   useEffect(() => {
-    checkPermission().then(res => {
-      setIsPermission(res);
-    });
-
     UserService.getCurrentUserInfo().then(response => {
       setUser(response.data.data);
       UserService.fetchImageAsBase64(response.data.data.avatar).then((base64String) => {
         setImg(base64String);
       });
     });
+
   }, []);
 
   const onClappse = () => {
@@ -109,27 +107,28 @@ function SideBar() {
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item title="Trang chủ" to="/" icon={<HomeOutlinedIcon />} selected={selected}
                   setSelected={setSelected} />
-            {isPermission && isPermission.includes("app") &&
+            {isAuth && isAuth.length && isAuth.includes("app") &&
             <Item title="Quản lý ứng dụng" to="/app" icon={<Apps />} selected={selected}
                   setSelected={setSelected} />}
-            {isPermission && isPermission.includes("user") &&
-            <Item title="Quản lý người dùng" to="/user" icon={<PeopleOutlinedIcon />} selected={selected}
+            {isAuth && isAuth.length && isAuth.includes("user") &&
+            <Item title="Quản lý người dùng" to="/user" icon={<PeopleOutlinedIcon />}
+                  selected={selected}
                   setSelected={setSelected} />}
-            {isPermission && isPermission.includes("role") &&
+            {isAuth && isAuth.length && isAuth.includes("role") &&
             <Item title="Quản lý quyền" to="/role" icon={<AccessibilityNew />} selected={selected}
                   setSelected={setSelected} />}
-            {isPermission && isPermission.includes("function") &&
+            {isAuth && isAuth.length && isAuth.includes("function") &&
             <Item title="Quản lý chức năng" to="/function" icon={<DeviceHub />} selected={selected}
                   setSelected={setSelected} />}
-            {isPermission && isPermission.includes("department") &&
+            {isAuth && isAuth.length && isAuth.includes("department") &&
             <Item title="Quản lý phòng ban" to="/department" icon={<HomeWork />}
                   selected={selected}
                   setSelected={setSelected} />}
-            {isPermission && isPermission.includes("partner") &&
+            {isAuth && isAuth.length && isAuth.includes("partner") &&
             <Item title="Quản lý đối tác" to="/partner" icon={<Handshake />}
                   selected={selected}
                   setSelected={setSelected} />}
-            {isPermission && isPermission.includes("dashboard") &&
+            {isAuth && isAuth.length && isAuth.includes("dashboard") &&
             <Item title="Quản lý dashboard" to="/dashboard" icon={<Speed />}
                   selected={selected}
                   setSelected={setSelected} />}
